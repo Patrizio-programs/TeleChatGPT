@@ -1,8 +1,13 @@
 import streamlit as st
 
 # Hide the settings menu
-st.set_option('deprecation.showfileUploaderEncoding', False)
-st.beta_set_lock(allow_lock=False)
+hide_streamlit_style = “”"
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
+“”"
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 # Setting the heading at the top of the page
