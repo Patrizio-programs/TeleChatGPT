@@ -1,5 +1,10 @@
 import streamlit as st
 
+# Hide the settings menu
+st.set_option('deprecation.showfileUploaderEncoding', False)
+st.beta_set_lock(allow_lock=False)
+
+
 # Setting the heading at the top of the page
 st.title('TeleChatGPT')
 
