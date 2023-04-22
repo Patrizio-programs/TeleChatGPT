@@ -32,13 +32,4 @@ with col2:
 with col1:
   st.image("https://i.ibb.co/WFwwmYF/Screenshot-20230419-234422-Telegram.jpg")
 
-# Changing the background color of the page
-st.markdown("""
-    <style>
-    .stApp {
-        background-color:  #808080;
-    }
-    </style>
-    """,
-            unsafe_allow_html=True)
 
