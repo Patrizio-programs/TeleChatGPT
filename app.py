@@ -7,7 +7,7 @@ st.markdown(
     """
     <style>
     #MainMenu {
-        visibility: hidden !important;
+        display: none !important;
     }
     </style>
     """,
