@@ -3,7 +3,16 @@ import streamlit as st
 st.set_page_config(page_title="TeleChatPT Bot", layout="wide", initial_sidebar_state="collapsed")
 
 
-
+st.markdown(
+    """
+    <style>
+    #MainMenu {
+        visibility: hidden;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Setting the heading at the top of the page
 st.title('TeleChatGPT')
