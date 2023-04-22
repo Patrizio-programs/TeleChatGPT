@@ -1,5 +1,9 @@
 import streamlit as st
 
+st.set_page_config(initial_sidebar_state="collapsed")
+
+
+
 
 # Setting the heading at the top of the page
 st.title('TeleChatGPT')
