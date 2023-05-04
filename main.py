@@ -1,16 +1,34 @@
 import os
+from flask import Flask, request, render_template
 import telebot
-from flask import Flask, request
-import requests
-from threading import Thread
-import time
+from gpt4free import theb
 
-app = Flask(__name__)
+# Set up the Flask app
+app = Flask(__name__, template_folder="templates")
+
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
-chatgpt_url = os.environ['url']
-api_key = os.environ['API_KEY']
+
+#Webhook setup
+WEBHOOK_URL_BASE = "https://tele-chatgpt.patrickmedley.repl.co"
+bot.remove_webhook()
+bot.set_webhook(url=WEBHOOK_URL_BASE)
+
+
+# Define the response function
+def generate_message(message):
+  # Get the user's prompt
+  prompt = message['text']
+  id = message["chat"]["id"]
+
+  # Generate a response using theb package
+  response = ""
+  for token in theb.Completion.create(prompt):
+    response += token
+
+  # Send the response back to the user
+  bot.send_message(chat_id=id, text=response)
 
 
 # Define the start command
@@ -24,56 +42,29 @@ def start_command(message):
 @bot.message_handler(commands=['info'])
 def info_command(message):
   chat_id = message['chat']['id']
+  markup = telebot.types.InlineKeyboardMarkup()
+  button = telebot.types.InlineKeyboardButton(
+    text='TeleChatGPT', url='https://tele-chatgpt.patrickmedley.repl.co')
+  markup.add(button)
   bot.send_message(
     chat_id,
-    'TelechatGPT is powered by ChatGPT. Check this link for more info: https://patriziothedev.com/#/TeleChatGPT'
-  )
+    'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
+    reply_markup=markup)
 
 
-#requesturl
-#https://api.telegram.org/bot5540954974:AAHAy3eyPb_ZABlXIWjQBHDV7mv4hdRommU/setWebhook?url=https://tele-chatgpt.patrickmedley.repl.co
-@bot.message_handler(func=lambda message: True)
-def generate_message(message_dict):
-  # Get the user's prompt
-  prompt = message_dict["text"]
-
-  id = message_dict["chat"]["id"]
-
-  # Set up the request headers and data
-  headers = {
-    'Content-Type': 'application/json',
-    'Authorization': f'Bearer {api_key}'
-  }
-  data = {
-    "model": "gpt-3.5-turbo",
-    "messages": [{
-      "role": "user",
-      "content": prompt
-    }]
-  }
-
-  # Send the request to ChatGPT
-  response = requests.post(chatgpt_url, headers=headers, json=data)
-
-  # Get the response data
-  response_data = response.json()
-  # Check if the response contains the 'choices' key
-  if 'choices' not in response.json():
-    bot.send_message(chat_id=id, text='Error generating message')
-    return
-
-  # Get the generated message from the response
-  choices = response.json()['choices']
-  # Get the first item in the 'choices' list
-  first_choice = choices[0]
-  # Get the 'message' dictionary from the first choice
-  message_dict = first_choice['message']
-  # Get the 'content' value from the 'message' dictionary
-  message_content = message_dict['content']
-
-  bot.send_message(chat_id=id, text=message_content)
+@bot.message_handler(commands=['bots'])
+def bots_command(message):
+  chat_id = message['chat']['id']
+  button = telebot.types.InlineKeyboardButton(
+    text="More bots here!", url="https://t.me/PatrizioTheDevbot")
+  keyboard = telebot.types.InlineKeyboardMarkup()
+  keyboard.add(button)
+  bot.send_message(chat_id=chat_id,
+                   text="To check on the other bots select the button",
+                   reply_markup=keyboard)
 
 
+# Define the parse_message function
 def parse_message(message):
   if message['text'].startswith('/'):
     # Handle command
@@ -81,15 +72,18 @@ def parse_message(message):
       start_command(message)
     elif message['text'] == '/info':
       info_command(message)
+    elif message['text'] == '/bots':
+      bots_command(message)
     else:
-      bot.reply_to(message, 'Unknown command.')
+      id = message["chat"]["id"]
+      bot.send_message(id, 'Unknown command.')
   else:
     # Handle regular message
     # Do something with the message
     generate_message(message)
 
 
-# Flask route setup
+# Define the webhook route
 @app.route("/", methods=["POST", "GET"])
 def index():
   if request.method == "POST":
@@ -97,17 +91,10 @@ def index():
     message = msg["message"]
     parse_message(message)
   else:
-    return ("TeleChatGPT Online")
+    return render_template("index.html")
   return ("TELECHATGPT")
 
 
-# Keep the server alive
-def keep_alive():
-  server = Thread(target=app.run, args=('0.0.0.0', 8080), daemon=True)
-  server.start()
-  while True:
-    time.sleep(6)
-
-
-if __name__ == "__main__":
-  keep_alive()
+# Start the Flask app
+if __name__ == '__main__':
+  app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
