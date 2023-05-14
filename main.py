@@ -98,6 +98,7 @@ def parse_message(message):
 def handle_all_messages(message):
   parse_message(message)
 
+bot.add_message_handler(handle_all_messages)
 # Handle incoming webhook requests from Telegram
 @app.route('/' + bot_key, methods=['POST'])
 def webhook():
