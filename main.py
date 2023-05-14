@@ -102,9 +102,10 @@ bot.add_message_handler(handle_all_messages)
 # Handle incoming webhook requests from Telegram
 @app.route('/' + bot_key, methods=['POST'])
 def webhook():
-  update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
-  bot.process_new_updates([update])
-  return 'ok', 200
+    update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
+    message = update.message
+    handle_all_messages(message)
+    return 'ok', 200
 
 
 @app.route("/", methods=["GET"])
