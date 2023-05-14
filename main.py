@@ -1,6 +1,7 @@
 import os
 import telebot
 from flask import Flask, request, render_template
+rom revChatGPT.V1 import Chatbot
 
 app=Flask(__name__)
 
@@ -18,28 +19,14 @@ server = Flask(__name__)
 
 # Define the response function
 def generate_message(message):
-  user_message = message.text
-  global chat_history
-  # Get the user's prompt
-  prompt = f"{chat_history}\nHuman: {user_message}\nAI:"
-
-  # Generate a response using the OpenAI package
-  response = openai.Completion.create(model="gpt-3.5-turbo",
-                                      prompt=prompt,
-                                      temperature=0.7,
-                                      max_tokens=256,
-                                      top_p=1,
-                                      frequency_penalty=0,
-                                      presence_penalty=0,
-                                      stop=["Human:",
-                                            "AI:"]).choices[0].text.strip()
-
-  # Update chat history with new prompt and response
-  chat_history += f"\nHuman: {user_message}\nAI: {response}"
-
-  # Send the response back to the user
-  chat_id = message.chat.id
-  print(response)
+  chatbot = Chatbot(config={
+  "access_token": "{key}"})
+  prompt = message.text
+  response = ""
+  for data in chatbot.ask(
+    prompt
+  ):
+    response = data["message"]
   bot.send_message(chat_id=chat_id, text=response)
 
 
