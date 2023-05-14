@@ -17,12 +17,11 @@ server = Flask(__name__)
 # Define the response function
 def generate_message(message):
   chatbot = Chatbot(config={
-  "access_token": key})
+    "access_token": key
+  }, conversation_id=str(message.chat.id)) # generate conversation id using chat id
   prompt = message.text
   response = ""
-  for data in chatbot.ask(
-    prompt
-  ):
+  for data in chatbot.ask(prompt):
     response = data["message"]
   bot.send_message(chat_id=message.chat.id, text=response)
 
