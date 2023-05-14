@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, render_template
 import telebot
-from gpt4free import theb
+from theb import Completion
 
 # Set up the Flask app
 app = Flask(__name__, template_folder="templates")
@@ -15,7 +15,6 @@ WEBHOOK_URL_BASE = "https://tele-chatgpt.patrickmedley.repl.co"
 bot.remove_webhook()
 bot.set_webhook(url=WEBHOOK_URL_BASE)
 
-
 # Define the response function
 def generate_message(message):
   # Get the user's prompt
@@ -24,19 +23,17 @@ def generate_message(message):
 
   # Generate a response using theb package
   response = ""
-  for token in theb.Completion.create(prompt):
+  for token in Completion.create(prompt):
     response += token
 
   # Send the response back to the user
   bot.send_message(chat_id=id, text=response)
-
 
 # Define the start command
 @bot.message_handler(commands=['start'])
 def start_command(message):
   chat_id = message['chat']['id']
   bot.send_message(chat_id, 'Enter a prompt, wait for a response.')
-
 
 # Define the info command
 @bot.message_handler(commands=['info'])
@@ -51,7 +48,6 @@ def info_command(message):
     'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
     reply_markup=markup)
 
-
 @bot.message_handler(commands=['bots'])
 def bots_command(message):
   chat_id = message['chat']['id']
@@ -62,7 +58,6 @@ def bots_command(message):
   bot.send_message(chat_id=chat_id,
                    text="To check on the other bots select the button",
                    reply_markup=keyboard)
-
 
 # Define the parse_message function
 def parse_message(message):
@@ -81,7 +76,6 @@ def parse_message(message):
     # Handle regular message
     # Do something with the message
     generate_message(message)
-
 
 # Define the webhook route
 @app.route("/", methods=["POST", "GET"])
