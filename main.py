@@ -99,7 +99,7 @@ def handle_all_messages(message):
   parse_message(message)
 
 # Handle incoming webhook requests from Telegram
-@server.route('/' + bot_key, methods=['POST'])
+@app.route('/' + bot_key, methods=['POST'])
 def webhook():
   update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
   bot.process_new_updates([update])
