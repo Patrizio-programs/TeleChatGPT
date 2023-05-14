@@ -2,6 +2,7 @@ import os
 import telebot
 from flask import Flask, request, render_template
 from revChatGPT.V1 import Chatbot
+import asyncio
 
 app=Flask(__name__)
 app.config['TIMEOUT'] = 60  # Set the timeout to 60 seconds
@@ -12,7 +13,7 @@ bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
 
 # Define the response function
-def generate_message(message):
+async def generate_message(message):
   chatbot = Chatbot(config={
     "access_token": key
   }, conversation_id=str(message.chat.id)) # generate conversation id using chat id
@@ -20,7 +21,7 @@ def generate_message(message):
   response = ""
   for data in chatbot.ask(prompt):
     response = data["message"]
-  bot.send_message(chat_id=message.chat.id, text=response)
+  await bot.send_message(chat_id=message.chat.id, text=response)
 
 
 # Define the start command
@@ -57,7 +58,7 @@ def bots_command(message):
 
 
 # Define the parse_message function
-def parse_message(message):
+async def parse_message(message):
   if message.text.startswith('/'):
     # Handle command
     if message.text == '/start':
@@ -68,24 +69,23 @@ def parse_message(message):
       bots_command(message)
     else:
       chat_id = message.chat.id
-      bot.send_message(chat_id, 'Unknown command.')
+      await bot.send_message(chat_id, 'Unknown command.')
   else:
     # Handle regular message
-    generate_message(message)
-
+    await generate_message(message)
 
 # Handle all messages, including regular messages
 @bot.message_handler(func=lambda message: True)
-def handle_all_messages(message):
-  parse_message(message)
+async def handle_all_messages(message):
+  await parse_message(message)
   return None
 
 # Handle incoming webhook requests from Telegram
 @app.route('/' + bot_key, methods=['POST'])
-def webhook():
+async def webhook():
     update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
     message = update.message
-    handle_all_messages(message)
+    await handle_all_messages(message)
     return 'ok', 200
 
 @app.route("/", methods=["GET"])
