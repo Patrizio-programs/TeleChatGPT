@@ -96,10 +96,10 @@ def parse_message(message):
 # Define the webhook route
 @app.route("/", methods=["POST", "GET"])
 def index():
-if request.method == "POST":
-msg = request.get_json()
-message = msg["message"]
-parse_message(message)
-else:
-return render_template("index.html")
-return ("TELECHATGPT")
+  if request.method == "POST":
+    msg = request.get_json()
+    message = msg["message"]
+    parse_message(message)
+  else:
+    return render_template("index.html")
+  return ("TELECHATGPT")
