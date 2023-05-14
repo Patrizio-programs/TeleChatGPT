@@ -98,10 +98,6 @@ def parse_message(message):
 def handle_all_messages(message):
   parse_message(message)
 
-  
-  
-
-
 # Handle incoming webhook requests from Telegram
 @server.route('/' + bot_key, methods=['POST'])
 def webhook():
@@ -114,4 +110,3 @@ def webhook():
 def index():
   return ("TELECHATGPT")
 
-bot.polling()
