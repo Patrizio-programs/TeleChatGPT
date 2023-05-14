@@ -4,7 +4,7 @@ from re import findall
 from threading import Thread
 from typing import Generator, Optional
 
-from curl_cffi import requests
+from requests import post
 from fake_useragent import UserAgent
 
 
@@ -36,14 +36,14 @@ class Completion:
     if chat_id in Completion.last_msg_ids:
       options['parentMessageId'] = Completion.last_msg_ids[chat_id]
 
-    response = requests.post('https://chatbot.theb.ai/api/chat-process',
-                             headers=headers,
-                             proxies=proxies,
-                             json={
-                               'prompt': prompt,
-                               'options': options
-                             },
-                             timeout=100000)
+    response = post('https://chatbot.theb.ai/api/chat-process',
+                    headers=headers,
+                    proxies=proxies,
+                    json={
+                      'prompt': prompt,
+                      'options': options
+                    },
+                    timeout=100000)
 
     for chunk in response.iter_content(chunk_size=1024):
       Completion.handle_stream_response(chunk)
@@ -75,8 +75,6 @@ class Completion:
   @staticmethod
   def get_response(prompt: str, proxy: Optional[str] = None) -> str:
     response_list = []
-    for message in Completion.create(prompt, proxy):
+    for message in Completion.create(prompt, 0, proxy):
       response_list.append(message)
     return ''.join(response_list)
-
-    Completion.message_queue.put(response.decode(errors='replace'))
