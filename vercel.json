@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/main.py"
+    }
+  ],
+  "builds": {
+    "api": {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  },
+  "env": {
+    "BOT_KEY": "5906970415:AAEgFJyTc00trD2pLT28jobP2Er73sfX1q0"
+  }
+}
