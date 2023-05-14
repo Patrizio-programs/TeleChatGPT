@@ -2,8 +2,12 @@ import os
 import telebot
 from flask import Flask, request, render_template
 from revChatGPT.V1 import Chatbot
+from queue import Queue
+import time
+import threading
 
 app=Flask(__name__)
+incoming_queue = Queue()
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
 print(bot_key)
@@ -74,6 +78,13 @@ def parse_message(message):
     # Handle regular message
     generate_message(message)
 
+def process_incoming_messages():
+    while True:
+        if not incoming_queue.empty():
+            message = incoming_queue.get()
+            parse_message(message)
+        else:
+            time.sleep(1) # Sleep for 1 second before checking again
 
 # Handle all messages, including regular messages
 @bot.message_handler(func=lambda message: True)
@@ -87,9 +98,11 @@ bot.add_message_handler(handle_all_messages)
 def webhook():
     update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
     message = update.message
-    handle_all_messages(message)
+    incoming_queue.put(message)
     return 'ok', 200
 
 @app.route("/", methods=["GET"])
 def index():
   return render_template("index.html")
+
+threading.Thread(target=process_incoming_messages, daemon=True).start()
