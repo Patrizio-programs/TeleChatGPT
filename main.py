@@ -1,7 +1,6 @@
 import os
 from flask import Flask, request, render_template
 import telebot
-from theb import Completion
 import openai
 
 # Set up the Flask app
