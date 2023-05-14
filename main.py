@@ -23,7 +23,7 @@ def generate_message(message):
 
   # Generate a response using theb package
   response = ""
-  for token in Completion.create(prompt):
+  for token in Completion.create(prompt, id):
     response += token
 
   # Send the response back to the user
