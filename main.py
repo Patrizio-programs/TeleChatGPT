@@ -2,10 +2,13 @@ import os
 from flask import Flask, request, render_template
 import telebot
 from theb import Completion
+import openai
 
 # Set up the Flask app
 app = Flask(__name__, template_folder="templates")
-
+openai.api_key = 'pk-qGZJtLelPnaOwizOBlZJUtcPhBOPTqMxuvhFSpAarHKYXXOg'
+openai.api_base = 'https://api.pawan.krd/v1'
+chat_history = ""
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
@@ -17,17 +20,28 @@ bot.set_webhook(url=WEBHOOK_URL_BASE)
 
 # Define the response function
 def generate_message(message):
-  # Get the user's prompt
-  prompt = message['text']
-  id = message["chat"]["id"]
+    global chat_history
+    # Get the user's prompt
+    prompt = f"{chat_history}\nHuman: {message.text}\nAI:"
 
-  # Generate a response using theb package
-  response = ""
-  for token in Completion.create(prompt, id):
-    response += token
+    # Generate a response using the OpenAI package
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo",
+        prompt=prompt,
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=["Human:", "AI:"]
+    ).choices[0].text.strip()
 
-  # Send the response back to the user
-  bot.send_message(chat_id=id, text=response)
+    # Update chat history with new prompt and response
+    chat_history += f"\nHuman: {message.text}\nAI: {response}"
+
+    # Send the response back to the user
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text=response)
 
 # Define the start command
 @bot.message_handler(commands=['start'])
