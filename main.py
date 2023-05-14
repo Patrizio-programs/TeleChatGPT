@@ -4,9 +4,6 @@ from flask import Flask, request, render_template
 from revChatGPT.V1 import Chatbot
 
 app=Flask(__name__)
-
-openai.api_key = 'pk-qGZJtLelPnaOwizOBlZJUtcPhBOPTqMxuvhFSpAarHKYXXOg'
-openai.api_base = 'https://api.pawan.krd/v1'
 chat_history = ""
 
 # Set up the Telegram bot using your bot token
@@ -15,7 +12,6 @@ key = os.environ['KEY']
 
 bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
-
 
 # Define the response function
 def generate_message(message):
@@ -94,7 +90,6 @@ def webhook():
     message = update.message
     handle_all_messages(message)
     return 'ok', 200
-
 
 @app.route("/", methods=["GET"])
 def index():
