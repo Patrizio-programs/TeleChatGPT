@@ -20,9 +20,10 @@ bot.set_webhook(url=WEBHOOK_URL_BASE)
 
 # Define the response function
 def generate_message(message):
+    user_message = message['text']
     global chat_history
     # Get the user's prompt
-    prompt = f"{chat_history}\nHuman: {message.text}\nAI:"
+    prompt = f"{chat_history}\nHuman: {user_message}\nAI:"
 
     # Generate a response using the OpenAI package
     response = openai.Completion.create(
@@ -37,10 +38,10 @@ def generate_message(message):
     ).choices[0].text.strip()
 
     # Update chat history with new prompt and response
-    chat_history += f"\nHuman: {message.text}\nAI: {response}"
+    chat_history += f"\nHuman: {user_message}\nAI: {response}"
 
     # Send the response back to the user
-    chat_id = message.chat.id
+    chat_id = message['chat']['id']
     bot.send_message(chat_id=chat_id, text=response)
 
 # Define the start command
