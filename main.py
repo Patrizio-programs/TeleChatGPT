@@ -8,6 +8,7 @@ import openai
 app = Flask(__name__, template_folder="templates")
 openai.api_key = 'pk-qGZJtLelPnaOwizOBlZJUtcPhBOPTqMxuvhFSpAarHKYXXOg'
 openai.api_base = 'https://api.pawan.krd/v1'
+processed_message_ids = []
 chat_history = ""
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
@@ -95,10 +96,13 @@ def parse_message(message):
 # Define the webhook route
 @app.route("/", methods=["POST", "GET"])
 def index():
-  if request.method == "POST":
-    msg = request.get_json()
-    message = msg["message"]
-    parse_message(message)
-  else:
-    return render_template("index.html")
-  return ("TELECHATGPT")
+    if request.method == "POST":
+        msg = request.get_json()
+        message = msg["message"]
+        message_id = message["message_id"]
+        if message_id not in processed_message_ids:
+            parse_message(message)
+            processed_message_ids.append(message_id)
+    else:
+        return render_template("index.html")
+    return ("TELECHATGPT")
