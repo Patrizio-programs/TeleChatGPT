@@ -4,8 +4,6 @@ from flask import Flask, request, render_template
 from revChatGPT.V1 import Chatbot
 
 app=Flask(__name__)
-chat_history = ""
-
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
 print(bot_key)
