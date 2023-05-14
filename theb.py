@@ -37,18 +37,16 @@ class Completion:
       options['parentMessageId'] = Completion.last_msg_ids[chat_id]
 
     response = requests.post('https://chatbot.theb.ai/api/chat-process',
-                             headers=headers,
-                             proxies=proxies,
-                             json={
-                               'prompt': prompt,
-                               'options': options
-                             },
-                             timeout=100000,
-                             stream=True)
+                         headers=headers,
+                         proxies=proxies,
+                         json={
+                           'prompt': prompt,
+                           'options': options
+                         },
+                         timeout=100000)
 
-    for line in response.iter_lines():
-      if line:
-        Completion.handle_stream_response(line.decode())
+for chunk in response.iter_content(chunk_size=1024):
+  Completion.handle_stream_response(chunk)
 
   @staticmethod
   def create(prompt: str,
