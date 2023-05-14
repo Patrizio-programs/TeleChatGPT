@@ -1,7 +1,7 @@
 import os
 import telebot
 import openai
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 app=Flask(__name__)
 
@@ -110,5 +110,5 @@ def webhook():
 
 @app.route("/", methods=["GET"])
 def index():
-  return ("TELECHATGPT")
+  return render_template("index.html")
 
