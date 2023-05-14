@@ -3,6 +3,8 @@ import telebot
 import openai
 from flask import Flask, request
 
+app=Flask(__name__)
+
 openai.api_key = 'pk-qGZJtLelPnaOwizOBlZJUtcPhBOPTqMxuvhFSpAarHKYXXOg'
 openai.api_base = 'https://api.pawan.krd/v1'
 chat_history = ""
