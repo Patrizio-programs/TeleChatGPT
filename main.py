@@ -11,6 +11,8 @@ chat_history = ""
 
 # Set up the Telegram bot using your bot token
 bot_key = os.environ['BOT_KEY']
+key = os.environ['KEY']
+
 bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
 
