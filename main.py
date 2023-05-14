@@ -11,7 +11,7 @@ bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
 
 #Webhook setup
-WEBHOOK_URL_BASE = "https://tele-chatgpt.patrickmedley.repl.co"
+WEBHOOK_URL_BASE = "https://tele-chat-gpt.vercel.app"
 bot.remove_webhook()
 bot.set_webhook(url=WEBHOOK_URL_BASE)
 
