@@ -1,7 +1,7 @@
 import os
 import telebot
 from flask import Flask, request, render_template
-rom revChatGPT.V1 import Chatbot
+from revChatGPT.V1 import Chatbot
 
 app=Flask(__name__)
 
