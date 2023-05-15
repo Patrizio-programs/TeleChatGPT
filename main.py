@@ -117,6 +117,3 @@ def parse_message(message):
   else:
     # Handle regular message
     generate_message(message)
-
-    
-app.run()
