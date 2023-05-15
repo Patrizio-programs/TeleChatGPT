@@ -24,7 +24,7 @@ async def generate_message(message):
   await bot.send_message(chat_id=message.chat.id, text=response)
 
 
-# Define the start command
+# Define the start command 
 @bot.message_handler(commands=['start'])
 def start_command(message):
   chat_id = message.chat.id
@@ -73,6 +73,9 @@ async def parse_message(message):
   else:
     # Handle regular message
     await generate_message(message)
+    
+    
+  
 
 # Handle incoming webhook requests from Telegram
 @app.route('/' + bot_key, methods=['POST'])
