@@ -103,7 +103,7 @@ def index():
 
 
 def keep_alive():
-  server = Thread(target=app.run, args=('0.0.0.0', 8080), daemon=True)
+  server = Thread(target=app.run, args=('0.0.0.0', int(os.environ.get('PORT', 8080))), daemon=True)
   server.start()
   while True:
     time.sleep(3) 
