@@ -127,3 +127,5 @@ def parse_message(message):
     # Handle regular message
     generate_message(message)
 
+if __name__ == '__main__':
+  keep_alive()
