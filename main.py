@@ -120,7 +120,7 @@ def parse_message(message):
     
     
 def keep_alive():
-  server = Thread(target=app.run, args=('0.0.0.0', 8080), daemon=True)
+  server = Thread(target=app.run, args=('0.0.0.0', int(os.environ.get('PORT', 8080))), daemon=True)
   server.start()
   
 if __name__ == '__main__':
