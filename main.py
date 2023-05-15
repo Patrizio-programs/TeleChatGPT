@@ -41,8 +41,7 @@ def start_command(message):
 def info_command(message):
   chat_id = message.chat.id
   markup = telebot.types.InlineKeyboardMarkup()
-  button = telebot.types.InlineKeyboardButton(
-    text='TeleChatGPT', url='https://telechatgpt-rt6k.onrender.com')
+  button = telebot.types.InlineKeyboardButton(text='TeleChatGPT', url='https://telechatgpt-rt6k.onrender.com')
   markup.add(button)
   bot.send_message(
     chat_id,
