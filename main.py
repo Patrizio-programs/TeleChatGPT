@@ -13,7 +13,7 @@ img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
-bot.set_webhook(url='https://tele-chatgpt--patrickmedley.repl.co')
+bot.set_webhook(url=os.environ['WEBHOOK'])
 
 
 # Define the response function
