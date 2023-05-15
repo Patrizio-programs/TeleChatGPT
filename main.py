@@ -13,7 +13,8 @@ img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
-bot.set_webhook(url=os.environ['WEBHOOK'])
+webhook = os.environ['WEBHOOK']
+bot.set_webhook(url=webhook)
 
 
 # Define the response function
@@ -41,7 +42,7 @@ def start_command(message):
 def info_command(message):
   chat_id = message.chat.id
   markup = telebot.types.InlineKeyboardMarkup()
-  button = telebot.types.InlineKeyboardButton(text='TeleChatGPT', url='patriziothedev.com')
+  button = telebot.types.InlineKeyboardButton(text='TeleChatGPT', url=webhook)
   markup.add(button)
   bot.send_message(
     chat_id,
