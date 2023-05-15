@@ -100,13 +100,6 @@ def index():
     return render_template("index.html")
 
 
-def keep_alive():
-  server = Thread(target=app.run, args=('0.0.0.0', int(os.environ.get('PORT', 8080))), daemon=True)
-  server.start()
-  while True:
-    time.sleep(3) 
-
-
 def parse_message(message):
   if message.text.startswith('/'):
     # Handle command
@@ -124,6 +117,3 @@ def parse_message(message):
   else:
     # Handle regular message
     generate_message(message)
-
-if __name__ == '__main__':
-  keep_alive()
