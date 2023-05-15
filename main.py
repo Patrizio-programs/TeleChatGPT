@@ -117,3 +117,11 @@ def parse_message(message):
   else:
     # Handle regular message
     generate_message(message)
+    
+    
+def keep_alive():
+  server = Thread(target=app.run, args=('0.0.0.0', 8080), daemon=True)
+  server.start()
+  
+if __name__ == '__main__':
+  keep_alive()
