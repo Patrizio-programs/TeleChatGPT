@@ -1,30 +1,37 @@
 import os
 import telebot
 from flask import Flask, request, render_template
-from revChatGPT.V1 import Chatbot
-import asyncio
+from threading import Thread
+import time
+import requests
+from Bard import Chatbot
 
-app=Flask(__name__)
- 
-# Set up the Telegram bot using your bot token
+app = Flask(__name__)
+session_dict = {}
+token = "VwjnU-fsrPuM_5iag-PVDc-7Rbp92i3pQEfE7B23WN8Di9TSVa-WAjdDJKxtJDaos-uwQg."
+
+img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
-key = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJwYXRyaXppb21lZGxleUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sImh0dHBzOi8vYXBpLm9wZW5haS5jb20vYXV0aCI6eyJ1c2VyX2lkIjoidXNlci1Nd2pLT1FIa3VESE51Z3hHR1R3a0NOYW4ifSwiaXNzIjoiaHR0cHM6Ly9hdXRoMC5vcGVuYWkuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA0MDM5ODE5NTY0NzAwNTc0NzgzIiwiYXVkIjpbImh0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEiLCJodHRwczovL29wZW5haS5vcGVuYWkuYXV0aDBhcHAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NDA5MTQ0NSwiZXhwIjoxNjg1MzAxMDQ1LCJhenAiOiJUZEpJY2JlMTZXb1RIdE45NW55eXdoNUU0eU9vNkl0RyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgbW9kZWwucmVhZCBtb2RlbC5yZXF1ZXN0IG9yZ2FuaXphdGlvbi5yZWFkIG9mZmxpbmVfYWNjZXNzIn0.gYbTpZWMhBevTHspTPSkUNtdWDGD5CJByWz3zz5wqsM53b9tQktfWqg6QRHQBzoRO-GSxU1VLxWR7V9yMLQmDt3K73d0PewwEFpjlE4qBRN3C1ueeVR9-4jVSddmugV2D1tirabW0Al5ZkxlfTjX3pmwwY-YhjSSJWiJ8po2QiBunsYgH6d8vYZnAKyE39qyh6PmnxCExgNkV_TF3iTUq8otCXBH9835qija77K1dz_VLAdxCMEFBrGsUzKOIlLIphEn2VtV8gKCmTAnSg6M1FmfogvgpwnryAiB0-ySSHg07p4kpOVEgKyI9O6XLWeWSFPo8pxNBrduIeVum81rbw"
+key = os.environ['KEY']
 bot = telebot.TeleBot(bot_key)
 server = Flask(__name__)
+bot.set_webhook(url='https://tele-chatgpt--patrickmedley.repl.co')
+
 
 # Define the response function
-async def generate_message(message):
-  chatbot = Chatbot(config={
-    "access_token": key
-  }, conversation_id=str(message.chat.id)) # generate conversation id using chat id
+@bot.message_handler()
+def generate_message(message):
   prompt = message.text
-  response = ""
-  for data in chatbot.ask(prompt):
-    response = data["message"]
-  await bot.send_message(chat_id=message.chat.id, text=response)
+  chat_id = message.chat.id
+  chatbot = Chatbot(token)
+  response_dict = chatbot.ask(prompt)
+  response = response_dict['content']
+  bot.send_message(chat_id, response)
+  
+  
 
 
-# Define the start command 
+# Define the start command
 @bot.message_handler(commands=['start'])
 def start_command(message):
   chat_id = message.chat.id
@@ -37,7 +44,7 @@ def info_command(message):
   chat_id = message.chat.id
   markup = telebot.types.InlineKeyboardMarkup()
   button = telebot.types.InlineKeyboardButton(
-    text='TeleChatGPT', url='https://tele-chat-gpt.vercel.app')
+    text='TeleChatGPT', url='https://tele-chatgpt--patrickmedley.repl.co')
   markup.add(button)
   bot.send_message(
     chat_id,
@@ -57,8 +64,52 @@ def bots_command(message):
                    reply_markup=keyboard)
 
 
-# Define the parse_message function
-async def parse_message(message):
+@bot.message_handler(commands=['img'])
+def image_info(message):
+  if message.text == "/img":
+    bot.send_message(
+      message.chat.id,
+      "Please send a prompt with the command to generate an image. For example /img a dancing giraffe."
+    )
+  else:
+    prompt = message.text[5:]
+    bot.send_message(
+      message.chat.id,
+      "It can take a while to generate your image so please be patient")
+    payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
+    headers = {
+      "Content-Type": "application/json",
+      "X-RapidAPI-Key": "4c695ea717mshd319d684b42713ap1035c3jsnaac2d74ef2c2",
+      "X-RapidAPI-Host": "openai80.p.rapidapi.com"
+    }
+    response = requests.post(img_url, json=payload, headers=headers)
+    response_dict = response.json()
+    images_list = response_dict["data"]
+    for image_dict in images_list:
+      photo_url = image_dict["url"]
+      bot.send_photo(message.chat.id, photo_url)
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+  if request.method == "POST":
+    update = telebot.types.Update.de_json(
+      request.stream.read().decode('utf-8'))
+    message = update.message
+    parse_message(message)
+    return 'ok', 200
+  else:
+    return render_template("index.html")
+
+
+def keep_alive():
+  server = Thread(target=app.run, args=('0.0.0.0', 8080), daemon=True)
+  server.start()
+  while True:
+    time.sleep(3) 
+
+
+def parse_message(message):
   if message.text.startswith('/'):
     # Handle command
     if message.text == '/start':
@@ -67,24 +118,12 @@ async def parse_message(message):
       info_command(message)
     elif message.text == '/bots':
       bots_command(message)
+    elif message.text.startswith('/img'):
+      image_info(message)
     else:
       chat_id = message.chat.id
-      await bot.send_message(chat_id, 'Unknown command.')
+      bot.send_message(chat_id, 'Unknown command.')
   else:
     # Handle regular message
-    await generate_message(message)
-    
-    
-  
+    generate_message(message)
 
-# Handle incoming webhook requests from Telegram
-@app.route('/' + bot_key, methods=['POST'])
-async def webhook():
-    update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
-    message = update.message
-    await parse_message(message)
-    return 'ok', 200
-
-@app.route("/", methods=["GET"])
-def index():
-  return render_template("index.html")
