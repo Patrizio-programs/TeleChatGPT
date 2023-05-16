@@ -82,7 +82,11 @@ def image_info(message):
     }
     response = requests.post(img_url, json=payload, headers=headers)
     response_dict = response.json()
+    print(response_dict)
+    print(response)
     images_list = response_dict["data"]
+    print(images_list)
+    
     for image_dict in images_list:
       photo_url = image_dict["url"]
       bot.send_photo(message.chat.id, photo_url)
