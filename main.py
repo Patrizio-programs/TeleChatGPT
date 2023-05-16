@@ -26,9 +26,6 @@ def generate_message(message):
   response = response_dict['content']
   bot.send_message(chat_id, response)
   
-  
-
-
 # Define the start command
 @bot.message_handler(commands=['start'])
 def start_command(message):
@@ -101,7 +98,6 @@ def index():
     return 'ok', 200
   else:
     return render_template("index.html")
-
 
 def parse_message(message):
   if message.text.startswith('/'):
