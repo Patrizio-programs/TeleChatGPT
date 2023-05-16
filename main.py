@@ -12,7 +12,6 @@ token = "VwjnU-fsrPuM_5iag-PVDc-7Rbp92i3pQEfE7B23WN8Di9TSVa-WAjdDJKxtJDaos-uwQg.
 img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
 bot = telebot.TeleBot(bot_key)
-server = Flask(__name__)
 webhook = os.environ['WEBHOOK']
 bot.set_webhook(url=webhook)
 
