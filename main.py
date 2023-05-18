@@ -1,5 +1,6 @@
 import os
 import requests
+import aiohttp
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
@@ -73,8 +74,9 @@ async def image_info(message: types.Message):
             message.chat.id,
             "It can take a while to generate your image so please be patient")
         payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
-        response = requests.post(IMG_API_URL, json=payload, headers=headers)
-        response_dict = response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(IMG_API_URL, json=payload, headers=headers) as response:
+                response_dict = await response.json()
         images_list = response_dict["data"]
         for image_dict in images_list:
             photo_url = image_dict["url"]
