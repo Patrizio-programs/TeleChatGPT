@@ -84,7 +84,22 @@ async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
 
 async def on_shutdown(dp):
+    logging.warning('Shutting down..')
+    # Close DB connection (if used)
+    await dp.storage.close()
+    await dp.storage.wait_closed()
+
+    # Remove webhook
     await bot.delete_webhook()
+
+    # Cancel all tasks started by aiohttp (e.g. long polling)
+    for task in asyncio.all_tasks():
+        task.cancel()
+
+    # Wait for all tasks to be cancelled
+    await asyncio.gather(*asyncio.all_tasks())
+
+    logging.warning('Bye!')
 
 # Start the webhook
 start_webhook(
