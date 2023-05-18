@@ -3,6 +3,7 @@ import requests
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
+import logging
 from Bard import Chatbot
 
 TOKEN = os.environ['BOT_KEY']
