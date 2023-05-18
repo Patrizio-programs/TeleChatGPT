@@ -19,13 +19,13 @@ bot.set_webhook(url=webhook)
 # Define the response function
 @bot.message_handler()
 def generate_message(message):
-  prompt = message.text
-  chat_id = message.chat.id
-  reply = bot.send_message(chat_id, "Thinking...")
-  chatbot = Chatbot(token)
-  response_dict = chatbot.ask(prompt)
-  response = response_dict['content']
-  bot.edit_message(chat_id=chat_id, message_id=reply.message.id, text=response)
+    prompt = message.text
+    chat_id = message.chat.id
+    reply = bot.send_message(chat_id, "Thinking...")
+    chatbot = Chatbot(token)
+    response_dict = chatbot.ask(prompt)
+    response = response_dict['content']
+    bot.edit_message_text(chat_id=chat_id, message_id=reply.message_id, text=response)
   
 # Define the start command
 @bot.message_handler(commands=['start'])
