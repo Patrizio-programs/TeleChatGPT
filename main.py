@@ -1,119 +1,98 @@
 import os
-import telebot
-from flask import Flask, request, render_template
-from threading import Thread
-import time
 import requests
+from aiogram import Bot, Dispatcher, types
+from aiogram.dispatcher.webhook import SendMessage
+from aiogram.utils.executor import start_webhook
 from Bard import Chatbot
 
-app = Flask(__name__)
-session_dict = {}
-token = "VwjnU-fsrPuM_5iag-PVDc-7Rbp92i3pQEfE7B23WN8Di9TSVa-WAjdDJKxtJDaos-uwQg."
-img_url = "https://openai80.p.rapidapi.com/images/generations"
-bot_key = os.environ['BOT_KEY']
-bot = telebot.TeleBot(bot_key)
-webhook = os.environ['WEBHOOK']
-bot.set_webhook(url=webhook)
+TOKEN = os.environ['BOT_KEY']
+WEBHOOK_URL = os.environ['WEBHOOK']
+IMG_API_URL = "https://openai80.p.rapidapi.com/images/generations"
+headers = {
+  "Content-Type": "application/json",
+  "X-RapidAPI-Key": "4c695ea717mshd319d684b42713ap1035c3jsnaac2d74ef2c2",
+  "X-RapidAPI-Host": "openai80.p.rapidapi.com"
+}
 
+bot = Bot(token=TOKEN)
+dp = Dispatcher(bot)
 
 # Define the response function
-@bot.message_handler()
-def generate_message(message):
+@dp.message_handler()
+async def generate_message(message: types.Message):
     prompt = message.text
     chat_id = message.chat.id
-    reply = bot.send_message(chat_id, "Thinking...")
-    chatbot = Chatbot(token)
+    reply = await bot.send_message(chat_id, "Thinking...")
+    chatbot = Chatbot(TOKEN)
     response_dict = chatbot.ask(prompt)
     response = response_dict['content']
-    bot.edit_message_text(chat_id=chat_id, message_id=reply.message_id, text=response)
-  
-# Define the start command
-@bot.message_handler(commands=['start'])
-def start_command(message):
-  chat_id = message.chat.id
-  bot.send_message(chat_id, 'Enter a prompt, wait for a response.')
+    await bot.edit_message_text(chat_id=chat_id, message_id=reply.message_id, text=response)
 
+# Define the start command
+@dp.message_handler(commands=['start'])
+async def start_command(message: types.Message):
+    chat_id = message.chat.id
+    await bot.send_message(chat_id, 'Enter a prompt, wait for a response.')
 
 # Define the info command
-@bot.message_handler(commands=['info'])
-def info_command(message):
-  chat_id = message.chat.id
-  markup = telebot.types.InlineKeyboardMarkup()
-  button = telebot.types.InlineKeyboardButton(text='TeleChatGPT', url=webhook)
-  markup.add(button)
-  bot.send_message(
-    chat_id,
-    'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
-    reply_markup=markup)
+@dp.message_handler(commands=['info'])
+async def info_command(message: types.Message):
+    chat_id = message.chat.id
+    markup = types.InlineKeyboardMarkup()
+    button = types.InlineKeyboardButton(text='TeleChatGPT', url=WEBHOOK_URL)
+    markup.add(button)
+    await bot.send_message(
+        chat_id,
+        'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
+        reply_markup=markup)
 
 
-@bot.message_handler(commands=['bots'])
-def bots_command(message):
-  chat_id = message.chat.id
-  button = telebot.types.InlineKeyboardButton(
-    text="More bots here!", url="https://t.me/PatrizioTheDevbot")
-  keyboard = telebot.types.InlineKeyboardMarkup()
-  keyboard.add(button)
-  bot.send_message(chat_id=chat_id,
-                   text="To check on the other bots select the button",
-                   reply_markup=keyboard)
+@dp.message_handler(commands=['bots'])
+async def bots_command(message: types.Message):
+    chat_id = message.chat.id
+    button = types.InlineKeyboardButton(
+      text="More bots here!", url="https://t.me/PatrizioTheDevbot")
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(button)
+    await bot.send_message(chat_id=chat_id,
+                            text="To check on the other bots select the button",
+                            reply_markup=keyboard)
 
 
-@bot.message_handler(commands=['img'])
-def image_info(message):
-  if message.text == "/img":
-    bot.send_message(
-      message.chat.id,
-      "Please send a prompt with the command to generate an image. For example /img a dancing giraffe."
-    )
-  else:
-    prompt = message.text[5:]
-    bot.send_message(
-      message.chat.id,
-      "It can take a while to generate your image so please be patient")
-    payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
-    headers = {
-      "Content-Type": "application/json",
-      "X-RapidAPI-Key": "4c695ea717mshd319d684b42713ap1035c3jsnaac2d74ef2c2",
-      "X-RapidAPI-Host": "openai80.p.rapidapi.com"
-    }
-    response = requests.post(img_url, json=payload, headers=headers)
-    response_dict = response.json()
-    print(response_dict)
-    print(response)
-    images_list = response_dict["data"]
-    print(images_list)
-    
-    for image_dict in images_list:
-      photo_url = image_dict["url"]
-      bot.send_photo(message.chat.id, photo_url)
-
-
-@app.route("/", methods=["GET", "POST"])
-def index():
-  if request.method == "POST":
-    update = telebot.types.Update.de_json(
-      request.stream.read().decode('utf-8'))
-    message = update.message
-    parse_message(message)
-    return 'ok', 200
-  else:
-    return render_template("index.html")
-
-def parse_message(message):
-  if message.text.startswith('/'):
-    # Handle command
-    if message.text == '/start':
-      start_command(message)
-    elif message.text == '/info':
-      info_command(message)
-    elif message.text == '/bots':
-      bots_command(message)
-    elif message.text.startswith('/img'):
-      image_info(message)
+@dp.message_handler(commands=['img'])
+async def image_info(message: types.Message):
+    if len(message.text.split()) == 1:
+        await bot.send_message(
+            message.chat.id,
+            "Please send a prompt with the command to generate an image. For example /img a dancing giraffe."
+        )
     else:
-      chat_id = message.chat.id
-      bot.send_message(chat_id, 'Unknown command.')
-  else:
-    # Handle regular message
-    generate_message(message)
+        prompt = message.text[5:]
+        await bot.send_message(
+            message.chat.id,
+            "It can take a while to generate your image so please be patient")
+        payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
+        response = requests.post(IMG_API_URL, json=payload, headers=headers)
+        response_dict = response.json()
+        images_list = response_dict["data"]
+        for image_dict in images_list:
+            photo_url = image_dict["url"]
+            await bot.send_photo(message.chat.id, photo_url)
+
+# Register webhook handlers
+async def on_startup(dp):
+    await bot.set_webhook(WEBHOOK_URL)
+
+async def on_shutdown(dp):
+    await bot.delete_webhook()
+
+# Start the webhook
+start_webhook(
+    dispatcher=dp,
+    webhook_path='/',
+    on_startup=on_startup,
+    on_shutdown=on_shutdown,
+    skip_updates=True,
+    host='0.0.0.0',
+    port=int(os.environ.get('PORT', 5000))
+)
