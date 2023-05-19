@@ -8,9 +8,8 @@ from Bard import Chatbot
 
 app = Flask(__name__)
 session_dict = {}
-token = "VwjnU-fsrPuM_5iag-PVDc-7Rbp92i3pQEfE7B23WN8Di9TSVa-WAjdDJKxtJDaos-uwQg."
-img_url = "https://openai80.p.rapidapi.com/images/generations"
-bot_key = os.environ['BOT_KEY']
+token = os.environ['CHAT_TOKEN']
+img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
 bot.set_webhook(url=webhook)
@@ -74,7 +73,7 @@ def image_info(message):
     payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
     headers = {
       "Content-Type": "application/json",
-      "X-RapidAPI-Key": "4c695ea717mshd319d684b42713ap1035c3jsnaac2d74ef2c2",
+      "X-RapidAPI-Key": img_token,
       "X-RapidAPI-Host": "openai80.p.rapidapi.com"
     }
     response = requests.post(img_url, json=payload, headers=headers)
