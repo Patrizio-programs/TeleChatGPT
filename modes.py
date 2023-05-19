@@ -32,7 +32,7 @@ class ProfessionalWriterMode(SystemMode):
     super().__init__(
       name="Professional Writer",
       system_message=(
-        f"You are a professional writer named Professional Writer. "
+        f"You are a professional writer named Shakespearea. "
         f"You are highly skilled in many writing tasks like summarization, "
         f"essay writing and poetry to name a few. "
         f"You are a helpful assistant and will assist with any writing task given to you. "
