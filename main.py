@@ -61,32 +61,46 @@ def bots_command(message):
 
 @bot.message_handler(commands=['img'])
 def image_info(message):
-  if message.text == "/img":
-    bot.send_message(
-      message.chat.id,
-      "Please send a prompt with the command to generate an image. For example /img a dancing giraffe."
-    )
-  else:
+    if message.text == "/img":
+        bot.send_message(
+            message.chat.id,
+            "Please send a prompt with the command to generate an image. For example /img a dancing giraffe."
+        )
+        return
+
     prompt = message.text[5:]
     bot.send_message(
-      message.chat.id,
-      "It can take a while to generate your image so please be patient")
+        message.chat.id,
+        "It can take a while to generate your image so please be patient"
+    )
     payload = {"prompt": prompt, "n": 2, "size": "1024x1024"}
     headers = {
-      "Content-Type": "application/json",
-      "X-RapidAPI-Key": img_token,
-      "X-RapidAPI-Host": "openai80.p.rapidapi.com"
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": img_token,
+        "X-RapidAPI-Host": "openai80.p.rapidapi.com"
     }
-    response = requests.post(img_url, json=payload, headers=headers)
-    response_dict = response.json()
-    print(response_dict)
-    print(response)
-    images_list = response_dict["data"]
-    print(images_list)
-    
+
+    try:
+        response = requests.post(img_url, json=payload, headers=headers)
+        response.raise_for_status()
+        response_dict = response.json()
+        images_list = response_dict["data"]
+    except requests.exceptions.HTTPError as ex:
+        bot.send_message(
+            message.chat.id,
+            f"Error: {ex}"
+        )
+        return
+    except Exception as ex:
+        bot.send_message(
+            message.chat.id,
+            f"Error: {ex}"
+        )
+        return
+
     for image_dict in images_list:
-      photo_url = image_dict["url"]
-      bot.send_photo(message.chat.id, photo_url)
+        photo_url = image_dict["url"]
+        bot.send_photo(message.chat.id, photo_url)
 
 
 @app.route("/", methods=["GET", "POST"])
