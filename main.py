@@ -88,7 +88,7 @@ def image_info(message):
     except requests.exceptions.HTTPError as ex:
         bot.send_message(
             message.chat.id,
-            f"Error: {ex}"
+            f"Error: {ex}. Try image generation another time"
         )
         return
     except Exception as ex:
