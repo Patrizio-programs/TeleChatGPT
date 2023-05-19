@@ -2,7 +2,7 @@
 
 A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
 
-Demo Vid
+Example:
 
 ![Alt Text](/static/demo.gif)
 
