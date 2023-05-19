@@ -4,7 +4,7 @@ A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle fr
 
 Example:
 
-![Alt Text](/static/demo.gif)
+<img src="/static/demo.gif" alt="Alt Text" width="400" height="200"/>
 
 ## Live Bot
 
