@@ -8,6 +8,7 @@ from Bard import Chatbot
 
 app = Flask(__name__)
 session_dict = {}
+bot_key = os.environ['BOT_KEY']
 token = os.environ['CHAT_TOKEN']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
