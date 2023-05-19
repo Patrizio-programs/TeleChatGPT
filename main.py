@@ -2,7 +2,6 @@ import os
 import telebot
 from flask import Flask, request, render_template
 from threading import Thread
-import time
 import requests
 from Bard import Chatbot
 
