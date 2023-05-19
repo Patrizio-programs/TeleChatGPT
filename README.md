@@ -2,11 +2,16 @@
 
 A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
 
+
+<video src="static/demo.mp4" controls>
+  Your browser does not support the video tag.
+</video>
+
 ## Live Bot
 
 <a href="https://t.me/TgramChatGPT_bot"><img src="https://img.shields.io/badge/Telegram-Chat%20with%20TeleChatGPT-blue?style=flat-square&logo=telegram"></a>
 
-<img src="https://i.ibb.co/zX3ShVy/IMG-20230515-191340-544.jpg" alt="TeleChatGPT" width="300">
+<img src="https://i.ibb.co/zX3ShVy/IMG-20230515-191340-544.jpg" alt="TeleChatGPT" width="300" height="300">
 
 ## Features I want to add
 
