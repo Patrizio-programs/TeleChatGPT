@@ -3,7 +3,8 @@
 A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
 
 Demo Vid
-[![Alt Text](https://img.youtube.com/vi/7lgEN3nt__I/0.jpg)](https://www.youtube.com/shorts/7lgEN3nt__I)
+
+![Alt Text](/static/demo.gif)
 
 ## Live Bot
 
