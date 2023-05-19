@@ -2,7 +2,7 @@
 
 A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
 
-<video src="static/demo.mp4" controls>
+<video src="./static/demo.mp4" controls>
   Your browser does not support the video tag.
 </video>
 
