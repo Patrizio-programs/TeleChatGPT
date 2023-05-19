@@ -12,9 +12,7 @@ A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle fr
 
 
 
-
-<pre><code>&lt;script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'&gt;&lt;/script&gt;&lt;script type='text/javascript'&gt;kofiwidget2.init('Support Me on Ko-fi', '#e02850', 'W7W1KJXSN');kofiwidget2.draw();&lt;/script&gt;</code></pre>
-
+<a href='https://ko-fi.com/W7W1KJXSN' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ## Version 0.1.3
 
