@@ -13,7 +13,6 @@ A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle fr
 - Add voice recognition and TTS so users can message using audio and receive an audio response
 - Create different modes for different uses like Professional Writer, Developer, etc.
 
-> "Quote or highlighted text goes here."
 
 #### Show your support so I can continue building fun projects like these:
 
