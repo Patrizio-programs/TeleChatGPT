@@ -2,7 +2,7 @@
 
 A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
 
-![TeleChatGPT](https://i.ibb.co/zX3ShVy/IMG-20230515-191340-544.jpg)
+<img src="https://i.ibb.co/zX3ShVy/IMG-20230515-191340-544.jpg" alt="TeleChatGPT" width="300">
 
 
 
