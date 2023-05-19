@@ -24,14 +24,68 @@
         padding: 4px;
         background: #f9f9f9;
       }
+      .github-btn {
+        margin-top: 20px;
+        display: inline-block;
+        background-color: #24292e;
+        color: #ffffff;
+        border-radius: 6px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, Here's the complete HTML code with the GitHub button added:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TeleChatGPT</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap">
+    <style>
+      body {
+        background-color: #1a1a1a;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 700;
+        color: white;
+        text-shadow: 2px 2px red;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 50px;
+      }
+      iframe {
+        margin-top: 20px;
+        border: none;
+        width: 100%;
+        padding: 4px;
+        background: #f9f9f9;
+      }
+      .github-btn {
+        margin-top: 20px;
+        display: inline-block;
+        background-color: #24292e;
+        color: #ffffff;
+        border-radius: 6px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+             transition: background-color 0.3s ease;
+      }
+      .github-btn:hover {
+        background-color: #6e7681;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1 class="mt-5 mb-3">TeleChatGPT</h1>
       <p>TeleChatGPT is a highly advanced Telegram bot that utilizes the remarkable capabilities of ChatGPT 3.5 via Google Bard. It also offers image generation via DallE.</p>
-//add a github button here that links to the github repo -https://github.com/Patrizio-programs/TeleChatGPT and says "Star the repo!"
-
+      <a class="github-btn" href="https://github.com/Patrizio-programs/TeleChatGPT" target="_blank" rel="noopener noreferrer">Star the repo!</a>
       <h2 class="mt-5 mb-3">Support the Creator</h2>
       <iframe id='kofiframe' src='https://ko-fi.com/patrizothedev/?hidefeed=true&widget=true&embed=true&preview=true' height='400' title='patrizothedev'></iframe>
     </div>
