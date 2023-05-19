@@ -23,4 +23,4 @@ A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle fr
 - [PyTBA Documentation](https://pytba.readthedocs.io/en/latest/index.html)
 - [acheong08/Bard GitHub repository](https://github.com/acheong08/Bard)
 
-### Version 0.1.3
+### Version 0.1.4
