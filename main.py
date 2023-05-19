@@ -1,38 +1,89 @@
 import os
 import telebot
+from telebot import types
 from flask import Flask, request, render_template
-from threading import Thread
 import requests
-from Bard import Chatbot
+from modes import modes
+from api import headers, completions
 
 app = Flask(__name__)
-session_dict = {}
 img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
 token = os.environ['CHAT_TOKEN']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
+current_mode = modes['TeleChatGPT']()
 bot.set_webhook(url=webhook)
-
 
 # Define the response function
 @bot.message_handler()
 def generate_message(message):
+  chat_id = message.chat.id
+  if message.text.startswith('/'):
+    # Handle command
+    if message.text == '/start':
+      start_command(message)
+    elif message.text == '/info':
+      info_command(message)
+    elif message.text == '/bots':
+      bots_command(message)
+    elif message.text == '/mode':
+      choose_mode(message)
+    else:
+      bot.send_message(chat_id, 'Unknown command.')
+  else:
+    # Handle regular message
+    system_message = current_mode.system_message
     prompt = message.text
-    chat_id = message.chat.id
     reply = bot.send_message(chat_id, "Thinking...")
-    chatbot = Chatbot(token)
-    response_dict = chatbot.ask(prompt)
-    response = response_dict['content']
-    bot.edit_message_text(chat_id=chat_id, message_id=reply.message_id, text=response)
-  
+    payload = {
+      "model":
+      "gpt-3.5-turbo",
+      "max_tokens":
+      4000,
+      "messages": [{
+        "role": "system",
+        "content": system_message
+      }, {
+        "role": "user",
+        "content": prompt
+      }]
+    }
+    response = requests.post(completions, json=payload, headers=headers)
+    response_json = response.json()
+    data = response_json['choices'][0]['message']['content']
+
+    bot.edit_message_text(chat_id=chat_id,
+                          message_id=reply.message_id,
+                          text=data)
+    
+# Define the mode update function
+@bot.message_handler(commands=['mode'])
+def choose_mode(message):
+  keyboard = types.InlineKeyboardMarkup()
+  for mode in modes:
+    button = types.InlineKeyboardButton(text=mode, callback_data=mode)
+    keyboard.add(button)
+  bot.send_message(message.chat.id,
+                   "Please choose a mode:",
+                   reply_markup=keyboard)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def mode_callback(call):
+  mode_name = call.data
+  mode = modes[mode_name]()
+  global current_mode
+  current_mode = mode
+  bot.answer_callback_query(callback_query_id=call.id,
+                            text=f"Mode changed to {mode_name}")
+
 # Define the start command
 @bot.message_handler(commands=['start'])
 def start_command(message):
   chat_id = message.chat.id
   bot.send_message(chat_id, 'Enter a prompt, wait for a response.')
-
 
 # Define the info command
 @bot.message_handler(commands=['info'])
@@ -97,7 +148,6 @@ def image_info(message):
             f"Error: {ex}"
         )
         return
-
     for image_dict in images_list:
         photo_url = image_dict["url"]
         bot.send_photo(message.chat.id, photo_url)
@@ -108,26 +158,7 @@ def index():
   if request.method == "POST":
     update = telebot.types.Update.de_json(
       request.stream.read().decode('utf-8'))
-    message = update.message
-    parse_message(message)
+    bot.process_new_updates([update])
     return 'ok', 200
   else:
     return render_template("index.html")
-
-def parse_message(message):
-  if message.text.startswith('/'):
-    # Handle command
-    if message.text == '/start':
-      start_command(message)
-    elif message.text == '/info':
-      info_command(message)
-    elif message.text == '/bots':
-      bots_command(message)
-    elif message.text.startswith('/img'):
-      image_info(message)
-    else:
-      chat_id = message.chat.id
-      bot.send_message(chat_id, 'Unknown command.')
-  else:
-    # Handle regular message
-    generate_message(message)
