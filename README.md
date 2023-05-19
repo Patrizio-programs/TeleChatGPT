@@ -21,7 +21,9 @@ Live Bot:
 #### Show your support so I can continue building fun projects like these:
 <a href='https://ko-fi.com/W7W1KJXSN' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-Mentions-These repos and projects made my project possible:
+Credits:
+
+[![Documentation](https://img.shields.io/badge/Documentation-PyTBA-blue?style=flat-square)](https://pytba.readthedocs.io/en/latest/index.html)
 
 [![GitHub](https://img.shields.io/badge/GitHub-acheong08%2FBard-blue?style=flat-square&logo=github)](https://github.com/acheong08/Bard)
 
