@@ -7,6 +7,7 @@ from Bard import Chatbot
 
 app = Flask(__name__)
 session_dict = {}
+img_url = "https://openai80.p.rapidapi.com/images/generations"
 bot_key = os.environ['BOT_KEY']
 token = os.environ['CHAT_TOKEN']
 img_token = os.environ['IMG_TOKEN']
