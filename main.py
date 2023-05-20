@@ -39,10 +39,11 @@ def generate_message(message):
     }
   response = requests.post(completions, json=payload, headers=headers)
   response_json = response.json()
+  data= response_json['choices'][0]['message']['content']
   print(response_json)
   bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
-                          text="updating version, please be patient..")
+                          text=data)
     
 # Define the mode update function
 @bot.message_handler(commands=['mode'])
@@ -163,9 +164,6 @@ def parse_message(message):
       image_info(message)
     if message.text == '/mode':
       choose_mode(message)
-    else:
-      chat_id = message.chat.id
-      bot.send_message(chat_id, 'Unknown command.')
   else:
     # Handle regular message
     generate_message(message)
