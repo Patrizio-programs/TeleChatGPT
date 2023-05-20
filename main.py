@@ -163,7 +163,7 @@ def parse_message(message):
     elif message.text.startswith('/img'):
       image_info(message)
     if message.text == '/mode':
-      choose_mode(message)
+      bot.process_new_messages()
   else:
     # Handle regular message
     generate_message(message)
