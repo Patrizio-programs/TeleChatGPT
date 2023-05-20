@@ -39,11 +39,10 @@ def generate_message(message):
     }
   response = requests.post(completions, json=payload, headers=headers)
   response_json = response.json()
-  data = response_json['choices'][0]['message']['content']
-
+  print(response_json)
   bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
-                          text=data)
+                          text="updating version, please be patient..")
     
 # Define the mode update function
 @bot.message_handler(commands=['mode'])
