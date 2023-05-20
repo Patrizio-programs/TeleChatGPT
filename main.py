@@ -162,6 +162,8 @@ def parse_message(message):
       bots_command(message)
     elif message.text.startswith('/img'):
       image_info(message)
+    if message.text == '/mode':
+      choose_mode(message)
     else:
       chat_id = message.chat.id
       bot.send_message(chat_id, 'Unknown command.')
