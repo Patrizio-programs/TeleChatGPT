@@ -143,11 +143,9 @@ def image_info(message):
 @app.route("/", methods=["GET", "POST"])
 def index():
   if request.method == "POST":
-    if flask.request.headers.get('content-type') == 'application/json':
-        json_string = flask.request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return ""
+   update = telebot.types.Update.de_json(
+      request.stream.read().decode('utf-8'))
+   bot.process_new_updates([update])
     return 'ok', 200
   else:
     return render_template("index.html")
