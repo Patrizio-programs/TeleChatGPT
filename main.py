@@ -19,7 +19,7 @@ bot.set_webhook(url=webhook)
 # Define the response function
 @bot.message_handler()
 def generate_message(message):
-  
+  chat_id = message.chat.id
     # Handle regular message
   system_message = current_mode.system_message
   prompt = message.text
