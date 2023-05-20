@@ -19,25 +19,12 @@ bot.set_webhook(url=webhook)
 # Define the response function
 @bot.message_handler()
 def generate_message(message):
-  chat_id = message.chat.id
-  if message.text.startswith('/'):
-    # Handle command
-    if message.text == '/start':
-      start_command(message)
-    elif message.text == '/info':
-      info_command(message)
-    elif message.text == '/bots':
-      bots_command(message)
-    elif message.text == '/mode':
-      choose_mode(message)
-    else:
-      bot.send_message(chat_id, 'Unknown command.')
-  else:
+  
     # Handle regular message
-    system_message = current_mode.system_message
-    prompt = message.text
-    reply = bot.send_message(chat_id, "Thinking...")
-    payload = {
+  system_message = current_mode.system_message
+  prompt = message.text
+  reply = bot.send_message(chat_id, "Thinking...")
+  payload = {
       "model":
       "gpt-3.5-turbo",
       "max_tokens":
@@ -50,11 +37,11 @@ def generate_message(message):
         "content": prompt
       }]
     }
-    response = requests.post(completions, json=payload, headers=headers)
-    response_json = response.json()
-    data = response_json['choices'][0]['message']['content']
+  response = requests.post(completions, json=payload, headers=headers)
+  response_json = response.json()
+  data = response_json['choices'][0]['message']['content']
 
-    bot.edit_message_text(chat_id=chat_id,
+  bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=data)
     
@@ -158,8 +145,26 @@ def index():
   if request.method == "POST":
     update = telebot.types.Update.de_json(
       request.stream.read().decode('utf-8'))
-    bot.process_new_updates([update])
-    print(update)
+    message = update.message
+    parse_message(message)
     return 'ok', 200
   else:
     return render_template("index.html")
+
+def parse_message(message):
+  if message.text.startswith('/'):
+    # Handle command
+    if message.text == '/start':
+      start_command(message)
+    elif message.text == '/info':
+      info_command(message)
+    elif message.text == '/bots':
+      bots_command(message)
+    elif message.text.startswith('/img'):
+      image_info(message)
+    else:
+      chat_id = message.chat.id
+      bot.send_message(chat_id, 'Unknown command.')
+  else:
+    # Handle regular message
+    generate_message(message)
