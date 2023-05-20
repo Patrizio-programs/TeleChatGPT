@@ -16,7 +16,7 @@ Example:
 
 ## Features I want to add
 
-- [x] Create different modes for different uses like Professional Writer, Developer, etc.
+- [ ] Create different modes for different uses like Professional Writer, Developer, etc.
 - [ ] Add voice recognition and TTS so users can message using audio and receive an audio response
 
  
