@@ -140,12 +140,16 @@ def image_info(message):
         bot.send_photo(message.chat.id, photo_url)
 
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-  if request.method == "POST":
-   update = telebot.types.Update.de_json(
-      request.stream.read().decode('utf-8'))
-   bot.process_new_updates([update])
-   return 'ok', 200
-  else:
-    return render_template("index.html")
+    if request.method == "POST":
+        update = telebot.types.Update.de_json(
+            request.stream.read().decode('utf-8'))
+        print("update received:", update)
+        bot.process_new_updates([update])
+        print("updates processed")
+        print(update)
+        return 'ok', 200
+    else:
+        return render_template("index.html")
