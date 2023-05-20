@@ -150,20 +150,3 @@ def index():
     return 'ok', 200
   else:
     return render_template("index.html")
-
-def parse_message(message):
-  if message.text.startswith('/'):
-    # Handle command
-    if message.text == '/start':
-      bot.process_new_messages(message)
-    elif message.text == '/info':
-      info_command(message)
-    elif message.text == '/bots':
-      bots_command(message)
-    elif message.text.startswith('/img'):
-      image_info(message)
-    if message.text == '/mode':
-      bot.process_new_messages(message)
-  else:
-    # Handle regular message
-    generate_message(message)
