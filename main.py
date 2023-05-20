@@ -46,7 +46,6 @@ def info_command(message):
     'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
     reply_markup=markup)
 
-
 @bot.message_handler(commands=['bots'])
 def bots_command(message):
   chat_id = message.chat.id
