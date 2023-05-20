@@ -155,7 +155,7 @@ def parse_message(message):
   if message.text.startswith('/'):
     # Handle command
     if message.text == '/start':
-      start_command(message)
+      bot.process_new_messages()
     elif message.text == '/info':
       info_command(message)
     elif message.text == '/bots':
