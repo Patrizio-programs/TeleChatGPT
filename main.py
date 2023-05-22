@@ -17,7 +17,7 @@ bot.set_webhook(url=webhook)
 
 
 # Define the response function
-@bot.message_handler(func=lambda message: not message.text.startswith('/'))
+@bot.message_handler()
 def generate_message(message):
     prompt = message.text
     chat_id = message.chat.id
@@ -108,7 +108,25 @@ def index():
     update = telebot.types.Update.de_json(
       request.stream.read().decode('utf-8'))
     message = update.message
-    bot.process_new_updates([update])
+    parse_message(message)
     return 'ok', 200
   else:
     return render_template("index.html")
+
+def parse_message(message):
+  if message.text.startswith('/'):
+    # Handle command
+    if message.text == '/start':
+      start_command(message)
+    elif message.text == '/info':
+      info_command(message)
+    elif message.text == '/bots':
+      bots_command(message)
+    elif message.text.startswith('/img'):
+      image_info(message)
+    else:
+      chat_id = message.chat.id
+      bot.send_message(chat_id, 'Unknown command.')
+  else:
+    # Handle regular message
+    generate_message(message)
