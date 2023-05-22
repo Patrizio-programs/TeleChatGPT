@@ -13,6 +13,7 @@ token = os.environ['CHAT_TOKEN']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
+bot.delete_webhook()
 bot.set_webhook(url=webhook)
 
 
