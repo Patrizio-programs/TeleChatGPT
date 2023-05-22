@@ -16,9 +16,9 @@ Example:
 
 ## Features I want to add
 
-[ ] Add voice recognition and TTS so users can message using audio and receive an audio response
+- [ ] Add voice recognition and TTS so users can message using audio and receive an audio response
 
-[ ] Create different modes for different uses like Professional Writer, Developer, etc.
+- [ ] Create different modes for different uses like Professional Writer, Developer, etc.
 
 
 #### Show your support so I can continue building fun projects like these:
