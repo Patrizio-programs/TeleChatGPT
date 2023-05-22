@@ -17,7 +17,7 @@ bot.set_webhook(url=webhook)
 
 
 # Define the response function
-@bot.message_handler()
+@bot.message_handler(func=lambda message: not message.text.startswith('/'))
 def generate_message(message):
     prompt = message.text
     chat_id = message.chat.id
