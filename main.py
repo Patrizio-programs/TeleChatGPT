@@ -12,7 +12,6 @@ token = os.environ['CHAT_TOKEN']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
-current_mode = modes['TeleChatGPT']()
 bot.set_webhook(url=webhook)
 
 # Define the response function
@@ -37,26 +36,6 @@ bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=response)
     
-# Define the mode update function
-@bot.message_handler(commands=['mode'])
-def choose_mode(message):
-  keyboard = types.InlineKeyboardMarkup()
-  for mode in modes:
-    button = types.InlineKeyboardButton(text=mode, callback_data=mode)
-    keyboard.add(button)
-  bot.send_message(message.chat.id,
-                   "Please choose a mode:",
-                   reply_markup=keyboard)
-
-
-@bot.callback_query_handler(func=lambda call: True)
-def mode_callback(call):
-  mode_name = call.data
-  mode = modes[mode_name]()
-  global current_mode
-  current_mode = mode
-  bot.answer_callback_query(callback_query_id=call.id,
-                            text=f"Mode changed to {mode_name}")
 
 # Define the start command
 @bot.message_handler(commands=['start'])
