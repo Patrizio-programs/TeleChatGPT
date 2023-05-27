@@ -21,7 +21,7 @@ def generate_message(message):
   prompt = message.text
   reply = bot.send_message(chat_id, "Thinking...")
   chatbot = Chatbot(config={
-    "access_token": token
+    "access_token": token,
     "conversation_id": chat_id
   })
   prompt = prompt
