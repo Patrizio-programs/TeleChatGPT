@@ -18,24 +18,22 @@ bot.set_webhook(url=webhook)
 @bot.message_handler()
 def generate_message(message):
   chat_id = message.chat.id
-    # Handle regular message
-  
   prompt = message.text
   reply = bot.send_message(chat_id, "Thinking...")
-chatbot = Chatbot(config={
-  "access_token": token
-  "conversation_id": chat_id
-})
-prompt = prompt
-response = ""
-for data in chatbot.ask(
-  prompt
-):
-    response = data["message"]
-print(response)
-bot.edit_message_text(chat_id=chat_id,
-                          message_id=reply.message_id,
-                          text=response)
+  chatbot = Chatbot(config={
+    "access_token": token
+    "conversation_id": chat_id
+  })
+  prompt = prompt
+  response = ""
+  for data in chatbot.ask(
+    prompt
+  ):
+      response = data["message"]
+  print(response)
+  bot.edit_message_text(chat_id=chat_id,
+                            message_id=reply.message_id,
+                            text=response)
     
 
 # Define the start command
