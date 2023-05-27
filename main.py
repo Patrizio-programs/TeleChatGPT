@@ -4,7 +4,7 @@ from telebot import types
 from flask import Flask, request, render_template
 import requests
 from modes import modes
-from api import headers, completions
+from revChatGPT.V1 import Chatbot
 
 app = Flask(__name__)
 img_url = "https://openai80.p.rapidapi.com/images/generations"
@@ -21,29 +21,22 @@ bot.set_webhook(url=webhook)
 def generate_message(message):
   chat_id = message.chat.id
     # Handle regular message
-  system_message = current_mode.system_message
+  
   prompt = message.text
   reply = bot.send_message(chat_id, "Thinking...")
-  payload = {
-      "model":
-      "gpt-3.5-turbo",
-      "max_tokens":
-      4000,
-      "messages": [{
-        "role": "system",
-        "content": system_message
-      }, {
-        "role": "user",
-        "content": prompt
-      }]
-    }
-  response = requests.post(completions, json=payload, headers=headers)
-  response_json = response.json()
-  data= response_json['choices'][0]['message']['content']
-  print(response_json)
+chatbot = Chatbot(config={
+  "access_token": "<your access_token>"
+})
+prompt = prompt
+response = ""
+for data in chatbot.ask(
+  prompt
+):
+    response = data["message"]
+print(response)
   bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
-                          text=data)
+                          text=response)
     
 # Define the mode update function
 @bot.message_handler(commands=['mode'])
