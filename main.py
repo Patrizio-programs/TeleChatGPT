@@ -34,7 +34,7 @@ for data in chatbot.ask(
 ):
     response = data["message"]
 print(response)
-  bot.edit_message_text(chat_id=chat_id,
+bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=response)
     
