@@ -2,5 +2,5 @@ Flask==2.0.2
 pyTelegramBotAPI==4.0.0
 requests
 gunicorn
-tiktoken
-revChatGPT
+tiktoken==0.4.0 
+revChatGPT==5.2.0 
