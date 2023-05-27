@@ -113,13 +113,29 @@ def image_info(message):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "POST":
-      update = telebot.types.Update.de_json(
-            request.stream.read().decode('utf-8'))
-      print("update received:", update)
-      bot.process_new_updates([update])
-      print("updates processed")
-      print(update)
-      return 'ok', 200
+  if request.method == "POST":
+    update = telebot.types.Update.de_json(
+      request.stream.read().decode('utf-8'))
+    message = update.message
+    parse_message(message)
+    return 'ok', 200
+  else:
+    return render_template("index.html")
+
+def parse_message(message):
+  if message.text.startswith('/'):
+    # Handle command
+    if message.text == '/start':
+      start_command(message)
+    elif message.text == '/info':
+      info_command(message)
+    elif message.text == '/bots':
+      bots_command(message)
+    elif message.text.startswith('/img'):
+      image_info(message)
     else:
-        return render_template("index.html")
+      chat_id = message.chat.id
+      bot.send_message(chat_id, 'Unknown command.')
+  else:
+    # Handle regular message
+    generate_message(message)
