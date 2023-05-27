@@ -23,6 +23,7 @@ def generate_message(message):
   chatbot = Chatbot(config={
     "access_token": token,
     "conversation_id": chat_id
+       
   })
   prompt = prompt
   response = ""
@@ -30,7 +31,7 @@ def generate_message(message):
     prompt
   ):
       response = data["message"]
-  print(response)
+  print(data)
   bot.edit_message_text(chat_id=chat_id,
                             message_id=reply.message_id,
                             text=response)
