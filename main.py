@@ -3,7 +3,6 @@ import telebot
 from telebot import types
 from flask import Flask, request, render_template
 import requests
-from modes import modes
 from revChatGPT.V1 import Chatbot
 
 app = Flask(__name__)
