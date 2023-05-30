@@ -28,6 +28,6 @@ Example:
 ## Credits:
 
 - [PyTBA Documentation](https://pytba.readthedocs.io/en/latest/index.html)
-- [acheong08/Bard GitHub repository](https://github.com/acheong08/Bard)
+- [acheong08/Bard GitHub repository](https://github.com/acheong08/ChatGPT)
 
 ### Version 0.1.5
