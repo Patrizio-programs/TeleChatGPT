@@ -1,6 +1,6 @@
 # TeleChatGPT
 
-A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle from using OPENAI on Rapid API.
+A telegram bot using gpt 3.5 with image generation from Dalle from using OPENAI on Rapid API.
 
 ## Live Bot
 
@@ -11,7 +11,6 @@ A telegram bot using gpt 3.5 via Google Bard with image generation from Dalle fr
 Example:
 
 <img src="/static/demo.gif" alt="Alt Text" width="300" height="500"/>
-
 
 
 ## Features I want to add
