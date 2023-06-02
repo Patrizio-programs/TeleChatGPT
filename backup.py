@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import os
 import telebot
 from telebot import types
@@ -12,7 +13,7 @@ from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
 )
-
+load_dotenv()
 mode_names = list(modes.keys())
 current_mode = modes["TeleChatGPT"]
 
@@ -24,10 +25,10 @@ for mode_name in mode_names:
 
 app = Flask(__name__, template_folder="templates")
 img_url = "https://openai80.p.rapidapi.com/images/generations"
-bot_key = os.environ['BOT_KEY']
-img_token = os.environ['IMG_TOKEN']
+bot_key = os.getenv('BOT_KEY')
+img_token = os.getenv('IMG_TOKEN')
 bot = telebot.TeleBot(bot_key)
-webhook = os.environ['WEBHOOK']
+webhook = img_token = os.getenv('WEBHOOK')
 bot.delete_webhook()
 bot.set_webhook(url=webhook)
 # generate LLM response with system message
@@ -128,13 +129,40 @@ def image_info(message):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        update = telebot.types.Update.de_json(
-            request.stream.read().decode('utf-8'))
-        bot.process_new_updates([update])  # Handle command
-
+        json_data = request.get_json()
+        update = telebot.types.Update.de_json(json_data)
+        message = update.message
+        print(message)
+        parse_message(message)
         return 'ok', 200
     else:
         return ("GPT live")
+
+
+def parse_message(message):
+    if message.text:
+        if message.text.startswith('/'):
+            # Handle command
+            if message.text == '/start':
+                start_command(message)
+            elif message.text == '/info':
+                info_command(message)
+            elif message.text == '/bots':
+                bots_command(message)
+            elif message.text.startswith('/img'):
+                image_info(message)
+            elif message.text.startswith('/mode'):
+                start_mode(message)
+            else:
+                chat_id = message.chat.id
+                bot.send_message(chat_id, 'Unknown command.')
+        else:
+            # Handle regular message
+            generate_message(message)
+    elif message.callback_query:
+        # Handle callback query
+        callback_query = message.callback_query
+        callback_handler(callback_query)
 
 
 # define callback function for mode buttons
@@ -153,5 +181,10 @@ def modes_handler(message):
                      reply_markup=keyboard)
 
 
-app.run(debug=True, host="0.0.0.0", port=8080)
+def start_mode(message):
+    modes_handler(message)
+
+
+app.run(debug=True, host="0.0.0.0", port=80)
+
 # bot.polling()

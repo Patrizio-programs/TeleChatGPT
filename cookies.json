@@ -1,0 +1,62 @@
+[
+    {
+        "name": "__stripe_mid",
+        "value": "bf48df34-59c9-4b49-b1de-72a7fd6dd5d1affe04",
+        "domain": ".huggingface.co",
+        "hostOnly": false,
+        "path": "/",
+        "secure": true,
+        "httpOnly": false,
+        "sameSite": "strict",
+        "session": false,
+        "firstPartyDomain": "",
+        "partitionKey": null,
+        "expirationDate": 1717252932,
+        "storeId": null
+    },
+    {
+        "name": "token",
+        "value": "edcqNuWFoOSoJpiKioEqmZFIEnpflHjmsaOLcfbnwWeQLjSxaOPqcrdGjpjqczNADSMpNADkOwknluebxXgTflfZYzxFySJxDlqVOyWbUCFTIGPwHUqzrGjYPeqGvAku",
+        "domain": ".huggingface.co",
+        "hostOnly": false,
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "sameSite": "lax",
+        "session": false,
+        "firstPartyDomain": "",
+        "partitionKey": null,
+        "expirationDate": 1714934977,
+        "storeId": null
+    },
+    {
+        "name": "__stripe_sid",
+        "value": "7fa10a1d-24fa-41cc-921c-f5535b99245b83ab55",
+        "domain": ".huggingface.co",
+        "hostOnly": false,
+        "path": "/",
+        "secure": true,
+        "httpOnly": false,
+        "sameSite": "strict",
+        "session": false,
+        "firstPartyDomain": "",
+        "partitionKey": null,
+        "expirationDate": 1685718732,
+        "storeId": null
+    },
+    {
+        "name": "hf-chat",
+        "value": "0c65358d-36d2-4191-ad33-6c497d8887d7",
+        "domain": "huggingface.co",
+        "hostOnly": true,
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "partitionKey": null,
+        "expirationDate": 1716214160,
+        "storeId": null
+    }
+]
