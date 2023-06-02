@@ -15,7 +15,7 @@ Example:
 
 ## Features I want to add
 
-- [ ] Create different modes for different uses like Professional Writer, Developer, etc.
+- [x] Create different modes for different uses like Professional Writer, Developer, etc.
 - [ ] Add voice recognition and TTS so users can message using audio and receive an audio response
 
  
@@ -29,4 +29,4 @@ Example:
 - [PyTBA Documentation](https://pytba.readthedocs.io/en/latest/index.html)
 - [acheong08/Bard GitHub repository](https://github.com/acheong08/ChatGPT)
 
-### Version 0.1.5
+### Version 0.1.6
