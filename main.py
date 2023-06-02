@@ -134,7 +134,7 @@ def index():
 
         return 'ok', 200
     else:
-        return ("GPT live")
+        return render_template("index.html")
 
 
 # define callback function for mode buttons
