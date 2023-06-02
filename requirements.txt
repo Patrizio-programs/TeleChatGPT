@@ -5,3 +5,4 @@ flask
 requests
 pydantic
 hugchat
+emoji
