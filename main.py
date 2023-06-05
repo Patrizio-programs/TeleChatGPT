@@ -52,14 +52,14 @@ def start_command(message):
 @bot.message_handler(commands=['info'])
 def info_command(message):
     chat_id = message.chat.id
-    markup = telebot.types.InlineKeyboardMarkup()
     button = telebot.types.InlineKeyboardButton(
-        text='TeleChatGPT', url=webhook)
-    markup.add(button)
+        text="More bots here!", url="https://t.me/PatrizioTheDevbot")
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard.add(button)
     bot.send_message(
         chat_id,
         'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
-        reply_markup=markup)
+        reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['bots'])
