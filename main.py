@@ -24,8 +24,8 @@ bot_key = os.environ['BOT_KEY']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
-bot.delete_webhook()
-bot.set_webhook(url=webhook)
+#bot.delete_webhook()
+#bot.set_webhook(url=webhook)
 # generate LLM response with system message
 
 
