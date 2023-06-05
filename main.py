@@ -10,6 +10,7 @@ import ai
 
 mode_names = list(modes.keys())
 current_mode = modes["TeleChatGPT"]
+user_modes = {}
 
 keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)
 for mode_name in mode_names:
@@ -121,22 +122,25 @@ def index():
     else:
         return render_template("index.html")
 
-
 # define callback function for mode buttons
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
-    global current_mode
-    current_mode = modes[call.data]
+    user_id = call.message.chat.id
+    user_modes[user_id] = modes[call.data]
     bot.answer_callback_query(call.id, text="You have selected " + call.data)
-
 
 # define command handler to display mode buttons
 @bot.message_handler(commands=['mode'])
 def modes_handler(message):
-    bot.send_message(message.chat.id,
-                     text="Please select a mode:",
-                     reply_markup=keyboard)
+    user_id = message.chat.id
+    keyboard = create_keyboard()
+    bot.send_message(user_id, text="Please select a mode:", reply_markup=keyboard)
+
+    # check if the user has a stored mode and set it as the current mode
+    if user_id in user_modes:
+        current_mode = user_modes[user_id]
+    else:
+        current_mode = modes["TeleChatGPT"]
 
 
 app.run(debug=True, host="0.0.0.0", port=8080)
-# bot.polling()
