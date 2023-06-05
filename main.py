@@ -53,7 +53,7 @@ def start_command(message):
 def info_command(message):
     chat_id = message.chat.id
     button = telebot.types.InlineKeyboardButton(
-        text="More bots here!", url="https://t.me/PatrizioTheDevbot")
+        text="TeleChatGPT", url=webhook)
     keyboard = telebot.types.InlineKeyboardMarkup()
     keyboard.add(button)
     bot.send_message(
