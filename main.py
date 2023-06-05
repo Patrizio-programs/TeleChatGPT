@@ -133,7 +133,6 @@ def callback_handler(call):
 @bot.message_handler(commands=['mode'])
 def modes_handler(message):
     user_id = message.chat.id
-    keyboard = create_keyboard()
     bot.send_message(user_id, text="Please select a mode:", reply_markup=keyboard)
 
     # check if the user has a stored mode and set it as the current mode
