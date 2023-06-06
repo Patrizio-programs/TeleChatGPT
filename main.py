@@ -24,8 +24,8 @@ bot_key = os.environ['BOT_KEY']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
-#bot.delete_webhook()
-#bot.set_webhook(url=webhook)
+# bot.delete_webhook()
+# bot.set_webhook(url=webhook)
 # generate LLM response with system message
 
 
@@ -123,6 +123,8 @@ def index():
         return render_template("index.html")
 
 # define callback function for mode buttons
+
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     user_id = call.message.chat.id
@@ -130,10 +132,13 @@ def callback_handler(call):
     bot.answer_callback_query(call.id, text="You have selected " + call.data)
 
 # define command handler to display mode buttons
+
+
 @bot.message_handler(commands=['mode'])
 def modes_handler(message):
     user_id = message.chat.id
-    bot.send_message(user_id, text="Please select a mode:", reply_markup=keyboard)
+    bot.send_message(user_id, text="Please select a mode:",
+                     reply_markup=keyboard)
 
     # check if the user has a stored mode and set it as the current mode
     if user_id in user_modes:
