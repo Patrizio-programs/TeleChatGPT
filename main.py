@@ -4,17 +4,13 @@ from telebot import types
 from flask import Flask, request, render_template
 import requests
 import json
-# LLM imports
-from gpt_llm import llm as chatbot
+
 from modes import modes
-from langchain.prompts import (
-    SystemMessagePromptTemplate,
-    ChatPromptTemplate,
-    HumanMessagePromptTemplate,
-)
+import ai
 
 mode_names = list(modes.keys())
 current_mode = modes["TeleChatGPT"]
+user_modes = {}
 
 keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)
 for mode_name in mode_names:
@@ -28,8 +24,8 @@ bot_key = os.environ['BOT_KEY']
 img_token = os.environ['IMG_TOKEN']
 bot = telebot.TeleBot(bot_key)
 webhook = os.environ['WEBHOOK']
-bot.delete_webhook()
-bot.set_webhook(url=webhook)
+#bot.delete_webhook()
+#bot.set_webhook(url=webhook)
 # generate LLM response with system message
 
 
@@ -38,18 +34,8 @@ def generate_message(message):
     chat_id = message.chat.id
     prompt = message.text
     reply = bot.send_message(chat_id, "Thinking...")
-
-    # SORT OUT LLM CONFIG- NEED TO FIND A WAY TO SEPERATE THIS FUNCTION FOR BETTER READABILITY
-    system_message = current_mode
-    system_message_prompt = SystemMessagePromptTemplate.from_template(
-        system_message)
-    human_message = prompt
-    human_message_prompt = HumanMessagePromptTemplate.from_template(
-        human_message)
-    chat_prompt = ChatPromptTemplate.from_messages(
-        [system_message_prompt, human_message_prompt])
-    messages = chat_prompt.format_prompt().to_messages()
-    response = chatbot(str(chat_prompt.format_prompt()))
+    req = ai.Completion.create(prompt=prompt, systemMessage=current_mode)
+    response = req["text"]
     bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=response)
@@ -66,14 +52,14 @@ def start_command(message):
 @bot.message_handler(commands=['info'])
 def info_command(message):
     chat_id = message.chat.id
-    markup = telebot.types.InlineKeyboardMarkup()
     button = telebot.types.InlineKeyboardButton(
-        text='TeleChatGPT', url=webhook)
-    markup.add(button)
+        text="TeleChatGPT", url=webhook)
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard.add(button)
     bot.send_message(
         chat_id,
         'TelechatGPT is powered by ChatGPT. Click the button below for more info:',
-        reply_markup=markup)
+        reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['bots'])
@@ -136,22 +122,24 @@ def index():
     else:
         return render_template("index.html")
 
-
 # define callback function for mode buttons
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
-    global current_mode
-    current_mode = modes[call.data]
+    user_id = call.message.chat.id
+    user_modes[user_id] = modes[call.data]
     bot.answer_callback_query(call.id, text="You have selected " + call.data)
-
 
 # define command handler to display mode buttons
 @bot.message_handler(commands=['mode'])
 def modes_handler(message):
-    bot.send_message(message.chat.id,
-                     text="Please select a mode:",
-                     reply_markup=keyboard)
+    user_id = message.chat.id
+    bot.send_message(user_id, text="Please select a mode:", reply_markup=keyboard)
+
+    # check if the user has a stored mode and set it as the current mode
+    if user_id in user_modes:
+        current_mode = user_modes[user_id]
+    else:
+        current_mode = modes["TeleChatGPT"]
 
 
 app.run(debug=True, host="0.0.0.0", port=8080)
-# bot.polling()
