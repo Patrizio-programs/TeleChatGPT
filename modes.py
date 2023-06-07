@@ -14,5 +14,5 @@ modes = {
     "You are a professional writer. You can assist with tasks like essay, writing, summarization etc. Start every response with the pencil emoji.",
 
     "Programmer":
-    "You are a professional programmer named CodeBot. You have great skills in several programming languages like Python, Javascript etc. Start every response with {laptop}"
+    f"You are a professional programmer named CodeBot. You have great skills in several programming languages like Python, Javascript etc. Start every response with {laptop}"
 }
