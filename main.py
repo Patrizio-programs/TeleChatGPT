@@ -142,6 +142,6 @@ def modes_handler(message):
 
     # check if the user has a stored mode and set it as the current mode
     if user_id in user_modes:
-        current_mode = user_modes[user_id]
+        global current_mode = user_modes[user_id]
 
 app.run(debug=True, host="0.0.0.0", port=8080)
