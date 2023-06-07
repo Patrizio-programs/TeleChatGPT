@@ -27,6 +27,8 @@ Example:
 ## Credits:
 
 - [PyTBA Documentation](https://pytba.readthedocs.io/en/latest/index.html)
-- [acheong08/Bard GitHub repository](https://github.com/acheong08/ChatGPT)
+- [xtekky/gpt4free](https://github.com/xtekky/gpt4free)
+
+This project is not an official product or service of OpenAI and is purely for educational purposes. Don't sue me.
 
 ### Version 0.1.6
