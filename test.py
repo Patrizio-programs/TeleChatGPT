@@ -4,9 +4,14 @@ from telebot import types
 from flask import Flask, request, render_template
 import requests
 import json
+import getenv
+
 
 from modes import modes
 import ai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 mode_names = list(modes.keys())
 current_mode = modes["TeleChatGPT"]
@@ -20,11 +25,12 @@ for mode_name in mode_names:
 
 app = Flask(__name__, template_folder="templates")
 img_url = "https://openai80.p.rapidapi.com/images/generations"
-bot_key = os.environ['BOT_KEY']
-img_token = os.environ['IMG_TOKEN']
+bot_key = os.getenv('BOT_KEY')
+img_token = os.getenv('IMG_TOKEN')
+
 bot = telebot.TeleBot(bot_key)
-webhook = os.environ['WEBHOOK']
-# bot.delete_webhook()
+# webhook = os.environ['WEBHOOK']
+bot.delete_webhook()
 # bot.set_webhook(url=webhook)
 # generate LLM response with system message
 
@@ -53,7 +59,7 @@ def start_command(message):
 def info_command(message):
     chat_id = message.chat.id
     button = telebot.types.InlineKeyboardButton(
-        text="TeleChatGPT", url=webhook)
+        text="TeleChatGPT", url="webhook")
     keyboard = telebot.types.InlineKeyboardMarkup()
     keyboard.add(button)
     bot.send_message(
@@ -147,4 +153,5 @@ def modes_handler(message):
                      reply_markup=keyboard)
 
 
-app.run(debug=True, host="0.0.0.0", port=8080)
+bot.polling()
+# app.run(debug=True, host="0.0.0.0", port=8080)
