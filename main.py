@@ -125,15 +125,6 @@ def index():
 # define callback function for mode buttons
 
 
-@bot.callback_query_handler(func=lambda call: True)
-def callback_handler(call):
-    user_id = call.message.chat.id
-    user_modes[user_id] = modes[call.data]
-    bot.answer_callback_query(call.id, text="You have selected " + call.data)
-
-# define command handler to display mode buttons
-
-
 @bot.message_handler(commands=['mode'])
 def modes_handler(message):
     user_id = message.chat.id
@@ -142,6 +133,13 @@ def modes_handler(message):
 
     # check if the user has a stored mode and set it as the current mode
     if user_id in user_modes:
-        global current_mode = user_modes[user_id]
+        global current_mode
+        current_mode = user_modes[user_id]
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_handler(call):
+    user_id = call.message.chat.id
+    user_modes[user_id] = modes[call.data]
+    bot.answer_callback_query(call.id, text="You have selected " + call.data)
 
 app.run(debug=True, host="0.0.0.0", port=8080)
