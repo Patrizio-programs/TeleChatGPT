@@ -5,3 +5,4 @@ requests
 pydantic
 emoji
 python-dotenv
+fake_useragent
