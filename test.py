@@ -5,6 +5,7 @@ from flask import Flask, request, render_template
 import requests
 import json
 import getenv
+import deepai
 
 
 from modes import modes
@@ -39,9 +40,21 @@ bot.delete_webhook()
 def generate_message(message):
     chat_id = message.chat.id
     prompt = message.text
+    response = ""
+
+    messages = [
+        {"role": "system", "content": current_mode},
+        {"role": "user", "content": prompt},
+
+    ]
+
     reply = bot.send_message(chat_id, "Thinking...")
-    req = ai.Completion.create(prompt=prompt, systemMessage=current_mode)
-    response = req["text"]
+
+    for chunk in deepai.ChatCompletion.create(messages):
+        print(chunk, end="", flush=True)
+        response += chunk
+
+    print(response)
     bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=response)
@@ -59,7 +72,7 @@ def start_command(message):
 def info_command(message):
     chat_id = message.chat.id
     button = telebot.types.InlineKeyboardButton(
-        text="TeleChatGPT", url="webhook")
+        text="TeleChatGPT", url="https://telechatgpt-rt6k.onrender.com/")
     keyboard = telebot.types.InlineKeyboardMarkup()
     keyboard.add(button)
     bot.send_message(

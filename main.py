@@ -4,7 +4,7 @@ from telebot import types
 from flask import Flask, request, render_template
 import requests
 import json
-
+import deepai
 from modes import modes
 import ai
 
@@ -33,9 +33,20 @@ webhook = os.environ['WEBHOOK']
 def generate_message(message):
     chat_id = message.chat.id
     prompt = message.text
+    response = ""
+
+    messages = [
+        {"role": "system", "content": current_mode},
+        {"role": "user", "content": prompt},
+
+    ]
+
     reply = bot.send_message(chat_id, "Thinking...")
-    req = ai.Completion.create(prompt=prompt, systemMessage=current_mode)
-    response = req["text"]
+
+    for chunk in deepai.ChatCompletion.create(messages):
+        response += chunk
+
+    print(response)
     bot.edit_message_text(chat_id=chat_id,
                           message_id=reply.message_id,
                           text=response)
