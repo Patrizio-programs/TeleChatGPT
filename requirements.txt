@@ -3,3 +3,14 @@ pyTelegramBotAPI==4.0.0
 requests
 gunicorn
 revChatGPT==5.2.0 
+requests
+pycryptodome
+curl_cffi
+aiohttp
+certifi
+browser_cookie3
+websockets
+js2py
+quickjs
+flask
+flask-cors

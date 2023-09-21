@@ -7,13 +7,14 @@ from revChatGPT.V1 import Chatbot
 
 app = Flask(__name__)
 img_url = "https://openai80.p.rapidapi.com/images/generations"
-bot_key = os.environ['BOT_KEY']
-token = os.environ['CHAT_TOKEN']
-img_token = os.environ['IMG_TOKEN']
-bot = telebot.TeleBot(bot_key)
-webhook = os.environ['WEBHOOK']
-bot.set_webhook(url=webhook)
+bot_key = "5906970415:AAEgFJyTc00trD2pLT28jobP2Er73sfX1q0"
+token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJwYXRyaXppb21lZGxleUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sImh0dHBzOi8vYXBpLm9wZW5haS5jb20vYXV0aCI6eyJ1c2VyX2lkIjoidXNlci1Nd2pLT1FIa3VESE51Z3hHR1R3a0NOYW4ifSwiaXNzIjoiaHR0cHM6Ly9hdXRoMC5vcGVuYWkuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA0MDM5ODE5NTY0NzAwNTc0NzgzIiwiYXVkIjpbImh0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEiLCJodHRwczovL29wZW5haS5vcGVuYWkuYXV0aDBhcHAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY5MjgxMTUzMSwiZXhwIjoxNjk0MDIxMTMxLCJhenAiOiJUZEpJY2JlMTZXb1RIdE45NW55eXdoNUU0eU9vNkl0RyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgbW9kZWwucmVhZCBtb2RlbC5yZXF1ZXN0IG9yZ2FuaXphdGlvbi5yZWFkIG9yZ2FuaXphdGlvbi53cml0ZSBvZmZsaW5lX2FjY2VzcyJ9.MjAUrDnw_lf6zJ-fk6nirvUCIcAFlcXqcWr2p0YsahBnl2rRu1XrEOPcqh1vMoF9DzwonoFLDh4Cy4MtG7DaiMEo-pny99vOH9MXbrKDSwOQg9czhgD7Uoxe5RR5ErczAdruzjE_pjp372edsk2oAIxAZ5G_1lYC7Ooz9-MCuVK75vGTSQCRhBmV--_kRhSsZv9QvRmpm9OHkyyto839m2UZvv7RK-I28c106FYAUnRdvQbRnRnCtBaxaYPQIrOV8wrradO4C07HCrk4iPxc1Cpsxv996l2hEEQ0Eh638p_wo_gR1fTgVtEpRYgjn4PDMX6u-Z88T7ACruJZaYXlgw"
 
+img_token = "4c695ea717mshd319d684b42713ap1035c3jsnaac2d74ef2c2"
+bot = telebot.TeleBot(bot_key)
+webhook = 'web'
+# bot.set_webhook(url=webhook)
+bot.delete_webhook()
 # Define the response function
 
 
@@ -145,3 +146,6 @@ def parse_message(message):
     else:
         # Handle regular message
         generate_message(message)
+
+
+bot.polling()
